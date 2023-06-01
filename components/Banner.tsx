@@ -10,8 +10,8 @@ type Props = {
 
 const Banner = async ({ netflixOriginals }: Props) => {
   const randomBannerMovie =
-    netflixOriginals?.results[
-      Math.floor(Math.random() * netflixOriginals.results.length - 1)
+    netflixOriginals[
+      Math.floor(Math.random() * netflixOriginals.length - 1)
     ];
 
   return (
@@ -30,7 +30,7 @@ const Banner = async ({ netflixOriginals }: Props) => {
       <h1 className="text-2xl text-shadow-md md:text-4xl lg:text-7xl font-bold">
         {randomBannerMovie?.title ||
           randomBannerMovie?.name ||
-          randomBannerMovie.original_name}
+          randomBannerMovie?.original_name}
       </h1>
       <p className="max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl">
         {randomBannerMovie?.overview}
