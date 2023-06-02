@@ -2,25 +2,31 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
+import Input from "@/components/Input";
 
-type Props = {
-  email: string;
-  password: string;
-};
+type Props = {};
 
 export const metadata: Metadata = {
   title: "Login - Netflix Clone",
   description: "Login page",
 };
 
-const LoginPage = ({ email, password }: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Props>();
-  const onSubmit = handleSubmit((data) => console.log(data));
+const Auth = (props: Props) => {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [variant, setVariant] = useState("login");
+
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) =>
+      currentVariant === "login" ? "register" : "login"
+    );
+  }, []);
 
   return (
     <div className="relative flex h-screen w-full flex-col bg-black md:items-center md:justify-center md:bg-transparent">
@@ -30,7 +36,6 @@ const LoginPage = ({ email, password }: Props) => {
         fill
         className="object-cover -z-10 hidden opacity-60 sm:inline"
       />
-
       <Link href="/">
         <Image
           src="/images/logo.png"
@@ -41,54 +46,56 @@ const LoginPage = ({ email, password }: Props) => {
         />
       </Link>
 
-      <form
-        onSubmit={onSubmit}
-        className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"
-      >
-        <h1 className="text-4xl font-semibold">Sign In</h1>
-        <div className="space-y-4">
-          <label className="inline-block w-full">
-            <input
+      <div className="flex justify-center">
+        <div className="bg-black bg-opacity-70 p-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
+          <h2 className="text-white text-4xl mb-8 font-semibold">
+            {variant === "login" ? "Sign In" : "Register"}
+          </h2>
+          <div className="flex flex-col gap-4">
+            {variant === "register" && (
+              <Input
+                id="name"
+                type="text"
+                label="Username"
+                value={name}
+                onChange={(e: any) => setName(e.target.value)}
+              />
+            )}
+            <Input
+              id="email"
               type="email"
-              placeholder="Email"
-              className="input"
-              {...register("email", { required: true })}
+              label="Email"
+              value={email}
+              onChange={(e: any) => setEmail(e.target.value)}
             />
-            {errors.email && (
-              <p className="p-1 text-sm font-light text-red-400">
-                Please enter a valid email
-              </p>
-            )}
-          </label>
-          <label className="inline-block w-full">
-            <input
+            <Input
               type="password"
-              placeholder="Password"
-              className="input"
-              {...register("password", { required: true })}
+              id="password"
+              label="Password"
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
             />
-            {errors.password && (
-              <p className="p-1 text-sm font-light text-red-400">
-                Your password must contain between 4 and 60 characters
-              </p>
-            )}
-          </label>
-        </div>
+          </div>
+          <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+            {variant === "login" ? "Login" : "Sign up"}
+          </button>
 
-        <button
-          type="submit"
-          className="w-full rounded bg-red-600 py-3 font-semibold"
-        >
-          Sign in
-        </button>
-
-        <div className="flex space-x-2 items-center">
-          <p className="text-gray-400">New to Netflix?</p>
-          <button className="text-white hover:underline">Sign up now</button>
+          <p className="text-neutral-500 mt-12">
+            {variant === "login"
+              ? "First time using Netflix?"
+              : "Already have an account?"}
+            <span
+              onClick={toggleVariant}
+              className="text-white ml-1 hover:underline cursor-pointer"
+            >
+              {variant === "login" ? "Create an account" : "Login"}
+            </span>
+            .
+          </p>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default Auth;
