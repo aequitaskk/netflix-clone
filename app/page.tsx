@@ -25,7 +25,7 @@ export default async function Home() {
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
       <Header />
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
-        <Banner netflixOriginals={netflixOriginals.results} />
+        <Banner netflixOriginals={netflixOriginals.results}/>
         <section className="md:space-y-20">
           <Row title="Trending Now" movies={trendingNow.results} />
           <Row title="Top Rated" movies={topRated.results} />
@@ -35,6 +35,7 @@ export default async function Home() {
           <Row title="Romance Movies" movies={romanceMovies.results} />
           <Row title="Documentaries" movies={documentaries.results} />
         </section>
+        
       </main>
     </div>
   );

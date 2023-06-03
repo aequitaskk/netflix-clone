@@ -1,5 +1,3 @@
-import YouTube from "react-youtube";
-
 type Props = {
   params: {
     id: string;
