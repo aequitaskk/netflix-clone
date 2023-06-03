@@ -1,101 +1,105 @@
-"use client";
-import { Metadata } from "next";
+'use client'
+
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import Input from "@/components/Input";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useAuth from "@/hooks/useAuth";
 
-type Props = {};
+interface Inputs {
+  email: string;
+  password: string;
+}
 
-export const metadata: Metadata = {
-  title: "Login - Netflix Clone",
-  description: "Login page",
-};
+function Login() {
+  const [login, setLogin] = useState(false);
+  const { signIn, signUp } = useAuth();
 
-const Auth = (props: Props) => {
-  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [variant, setVariant] = useState("login");
-
-  const toggleVariant = useCallback(() => {
-    setVariant((currentVariant) =>
-      currentVariant === "login" ? "register" : "login"
-    );
-  }, []);
+  const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
+    if (login) {
+      await signIn(email, password);
+    } else {
+      await signUp(email, password);
+    }
+  };
 
   return (
-    <div className="relative flex h-screen w-full flex-col bg-black md:items-center md:justify-center md:bg-transparent">
+    <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
+      
       <Image
         src="/images/loginbg.jpg"
-        alt="login-bg"
+        alt="Login Background"
         fill
-        className="object-cover -z-10 hidden opacity-60 sm:inline"
+        className="-z-10 !hidden opacity-60 sm:!inline object-cover"
+        
       />
-      <Link href="/">
-        <Image
-          src="/images/logo.png"
-          alt="Netflix Logo"
-          width={150}
-          height={150}
-          className="object-contain absolute top-4 left-4 md:left-10 md:top-6"
-        />
-      </Link>
 
-      <div className="flex justify-center">
-        <div className="bg-black bg-opacity-70 p-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
-          <h2 className="text-white text-4xl mb-8 font-semibold">
-            {variant === "login" ? "Sign In" : "Register"}
-          </h2>
-          <div className="flex flex-col gap-4">
-            {variant === "register" && (
-              <Input
-                id="name"
-                type="text"
-                label="Username"
-                value={name}
-                onChange={(e: any) => setName(e.target.value)}
-              />
-            )}
-            <Input
-              id="email"
+      <img
+        src="https://rb.gy/ulxxee"
+        className="absolute left-4 top-4 cursor-pointer object-contain md:left-10 md:top-6"
+        width={150}
+        height={150}
+      />
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"
+      >
+        <h1 className="text-4xl font-semibold">Sign In</h1>
+        <div className="space-y-4">
+          <label className="inline-block w-full">
+            <input
               type="email"
-              label="Email"
-              value={email}
-              onChange={(e: any) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="input"
+              {...register("email", { required: true })}
             />
-            <Input
+            {errors.email && (
+              <p className="p-1 text-[13px] font-light  text-orange-500">
+                Please enter a valid email.
+              </p>
+            )}
+          </label>
+          <label className="inline-block w-full">
+            <input
               type="password"
-              id="password"
-              label="Password"
-              value={password}
-              onChange={(e: any) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="input"
+              {...register("password", { required: true })}
             />
-          </div>
-          <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
-            {variant === "login" ? "Login" : "Sign up"}
-          </button>
-
-          <p className="text-neutral-500 mt-12">
-            {variant === "login"
-              ? "First time using Netflix?"
-              : "Already have an account?"}
-            <span
-              onClick={toggleVariant}
-              className="text-white ml-1 hover:underline cursor-pointer"
-            >
-              {variant === "login" ? "Create an account" : "Login"}
-            </span>
-            .
-          </p>
+            {errors.password && (
+              <p className="p-1 text-[13px] font-light  text-orange-500">
+                Your password must contain between 4 and 60 characters.
+              </p>
+            )}
+          </label>
         </div>
-      </div>
+
+        <button
+          className="w-full rounded bg-[#e50914] py-3 font-semibold"
+          onClick={() => setLogin(true)}
+        >
+          Sign In
+        </button>
+
+        <div className="text-[gray]">
+          New to Netflix?{" "}
+          <button
+            type="submit"
+            className="text-white hover:underline"
+            onClick={() => setLogin(false)}
+          >
+            Sign up now
+          </button>
+        </div>
+      </form>
     </div>
   );
-};
+}
 
-export default Auth;
+export default Login;
