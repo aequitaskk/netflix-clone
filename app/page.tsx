@@ -3,36 +3,23 @@ import Header from "@/components/Header";
 import requests from "@/utils/requests";
 import { Movie } from "@/typings";
 import Row from "@/components/Row";
+import Modal from "@/components/Modal";
+
 
 type Props = {
 };
 
 export default async function Home() {
-  const netflixOriginals = await fetch(requests.fetchNetflixOriginals).then(
-    (res) => res.json()
-  );
-  const trendingNow = await fetch(requests.fetchTrending).then((res) =>
-    res.json()
-  );
-  const topRated = await fetch(requests.fetchTopRated).then((res) =>
-    res.json()
-  );
-  const actionMovies = await fetch(requests.fetchActionMovies).then((res) =>
-    res.json()
-  );
-  const comedyMovies = await fetch(requests.fetchComedyMovies).then((res) =>
-    res.json()
-  );
-  const horrorMovies = await fetch(requests.fetchHorrorMovies).then((res) =>
-    res.json()
-  );
-  const romanceMovies = await fetch(requests.fetchRomanceMovies).then((res) =>
-    res.json()
-  );
-  const documentaries = await fetch(requests.fetchDocumentaries).then((res) =>
-    res.json()
-  );
-  
+  const [netflixOriginals, trendingNow, topRated, actionMovies, comedyMovies, horrorMovies, romanceMovies, documentaries] = await Promise.all([
+    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
+    fetch(requests.fetchTrending).then((res) => res.json()),
+    fetch(requests.fetchTopRated).then((res) => res.json()),
+    fetch(requests.fetchActionMovies).then((res) => res.json()),
+    fetch(requests.fetchComedyMovies).then((res) => res.json()),
+    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
+    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
+    fetch(requests.fetchDocumentaries).then((res) => res.json())
+  ]);
 
   return (
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
