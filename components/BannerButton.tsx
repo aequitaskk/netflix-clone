@@ -28,7 +28,7 @@ const BannerButton = ({ randomBannerMovie }: Props) => {
 
   const genreIds = randomBannerMovie?.genre_ids;
   const movieGenre = genres[0].genres.filter((genre) =>
-    genreIds.includes(genre.id)
+    genreIds?.includes(genre.id)
   );
 
   // console.log(movieGenre);

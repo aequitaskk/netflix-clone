@@ -1,15 +1,20 @@
 "use client";
 
+import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsBellFill } from "react-icons/bs";
+import DropdownMenu from '@/components/DropdownMenu'
+
 
 type Props = {};
 
 const Header = (props: Props) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,9 +28,18 @@ const Header = (props: Props) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setLoggedIn(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <header className={`${isScrolled && "bg-[#141414]"}`}>
-      <div className="flex items-center space-x-2 md:space-x-10">
+      <div className="flex items-center space-x-2 md:space-x-10 px-4">
         <Link href="/">
           <Image
             src="/images/logo.png"
@@ -44,19 +58,14 @@ const Header = (props: Props) => {
         </ul>
       </div>
 
-      <div className="flex items-center space-x-4 text-sm font-light">
+      <div className="flex items-center space-x-4 text-sm font-light pr-8">
         <BiSearch className="hidden md:inline text-xl" />
         <p className="hidden lg:inline">Kids</p>
         <BsBellFill className="text-lg" />
-        <Link href="/account">
-          <Image
-            src="/images/default-blue.png"
-            alt="profile-icon"
-            width={35}
-            height={35}
-            className="rounded"
-          />
-        </Link>
+
+        <DropdownMenu />
+
+        
       </div>
     </header>
   );

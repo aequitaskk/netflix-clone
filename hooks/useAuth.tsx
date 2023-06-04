@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
-        router.push("/");
+        router.push("/login");
         setLoading(false);
       })
       .catch((error) => alert(error.message))
@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signOut(auth)
       .then(() => {
         setUser(null);
+        router.push("/login");
       })
       .catch((error) => alert(error.message))
       .finally(() => setLoading(false));
