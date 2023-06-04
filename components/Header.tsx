@@ -28,15 +28,6 @@ const Header = (props: Props) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      setLoggedIn(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <header className={`${isScrolled && "bg-[#141414]"}`}>
       <div className="flex items-center space-x-2 md:space-x-10 px-4">
@@ -59,9 +50,9 @@ const Header = (props: Props) => {
       </div>
 
       <div className="flex items-center space-x-4 text-sm font-light pr-8">
-        <BiSearch className="hidden md:inline text-xl" />
-        <p className="hidden lg:inline">Kids</p>
-        <BsBellFill className="text-lg" />
+        <BiSearch className="hidden md:inline text-xl cursor-pointer" />
+        <p className="hidden lg:inline cursor-pointer text-sm font-light text-[#e5e5e5] transition duration-300 hover:text-[#b3b3b3]">Kids</p>
+        <BsBellFill className="text-lg cursor-pointer" />
 
         <DropdownMenu />
 
