@@ -8,7 +8,7 @@ type Props = {
   netflixOriginals: Movie[];
 };
 
-const Banner = async ({ netflixOriginals }: Props) => {
+const Banner = ({ netflixOriginals }: Props) => {
   const randomBannerMovie =
     netflixOriginals[Math.floor(Math.random() * netflixOriginals.length - 1)];
 
